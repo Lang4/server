@@ -701,7 +701,7 @@ void zRecycleThread::run()
  */
 const int LTCPTaskPool::getSize()
 {
-	struct MyCallback : zThreadGroup::Callback
+	struct MyCallback : LThreadGroup::Callback
 	{
 		int size;
 		MyCallback() : size(0) {}

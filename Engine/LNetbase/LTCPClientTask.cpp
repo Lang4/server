@@ -221,7 +221,7 @@ void LTCPClientTask::getNextState()
  */
 void LTCPClientTask::resetState()
 {
-	ConnState old_state = getState();
+	//ConnState old_state = getState();
 
 	lifeTime.now();
 	setState(close);

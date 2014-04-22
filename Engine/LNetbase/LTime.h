@@ -14,6 +14,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sstream>
+#include <stdio.h>
 
 #include "LType.h"
 #include "LMutex.h"

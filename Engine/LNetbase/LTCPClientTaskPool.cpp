@@ -1,6 +1,6 @@
 /**
  * \file
- * \version  $Id: LCPClientTaskPool.cpp 6285 2006-04-11 06:39:28Z whj $
+ * \version  $Id: LTCPClientTaskPool.cpp 6285 2006-04-11 06:39:28Z whj $
  * \brief 实现线程池类，用于处理多连接服务器
  *
  * 
@@ -16,7 +16,7 @@
 
 #include "LSocket.h"
 #include "LThread.h"
-#include "LCPClientTaskPool.h"
+#include "LTCPClientTaskPool.h"
 #include "LTime.h"
 
 /**
@@ -26,10 +26,10 @@
 class LCheckconnectThread : public LThread
 {
 	private:
-		LCPClientTaskPool *pool;
+		LTCPClientTaskPool *pool;
 	public:
 		LCheckconnectThread(
-				LCPClientTaskPool *pool,
+				LTCPClientTaskPool *pool,
 				const std::string &name = std::string("LCheckconnectThread"))
 			: LThread(name), pool(pool)
 			{
@@ -116,7 +116,7 @@ class LCheckwaitThread : public LThread, public LTCPClientTaskQueue
 
 	private:
 
-		LCPClientTaskPool *pool;
+		LTCPClientTaskPool *pool;
 		LTCPClientTaskContainer tasks;	/**< 任务列表 */
 		LTCPClientTaskContainer::size_type task_count;          /**< tasks计数(保证线程安全*/
 #ifdef _USE_EPOLL_
@@ -188,7 +188,7 @@ class LCheckwaitThread : public LThread, public LTCPClientTaskQueue
 		 * \param name 线程名称
 		 */
 		LCheckwaitThread(
-				LCPClientTaskPool *pool,
+				LTCPClientTaskPool *pool,
 				const std::string &name = std::string("LCheckwaitThread"))
 			: LThread(name), pool(pool)
 			{
@@ -346,7 +346,7 @@ class LTCPClientTaskThread : public LThread, public LTCPClientTaskQueue
 
 	private:
 
-		LCPClientTaskPool *pool;
+		LTCPClientTaskPool *pool;
 		LTCPClientTaskContainer tasks;	/**< 任务列表 */
 		LTCPClientTaskContainer::size_type task_count;          /**< tasks计数(保证线程安全*/
 #ifdef _USE_EPOLL_
@@ -414,7 +414,7 @@ class LTCPClientTaskThread : public LThread, public LTCPClientTaskQueue
 		 * \param name 线程名称
 		 */
 		LTCPClientTaskThread(
-				LCPClientTaskPool *pool,
+				LTCPClientTaskPool *pool,
 				const std::string &name = std::string("LTCPClientTaskThread"))
 			: LThread(name), pool(pool)
 			{
@@ -626,7 +626,7 @@ void LTCPClientTaskThread::run()
  * \brief 析构函数
  *
  */
-LCPClientTaskPool::~LCPClientTaskPool()
+LTCPClientTaskPool::~LTCPClientTaskPool()
 {
 	if (checkconnectThread)
 	{
@@ -652,7 +652,7 @@ LCPClientTaskPool::~LCPClientTaskPool()
 	}
 }
 
-LTCPClientTaskThread *LCPClientTaskPool::newThread()
+LTCPClientTaskThread *LTCPClientTaskPool::newThread()
 {
 	std::ostringstream name;
 	name << "LTCPClientTaskThread[" << taskThreads.size() << "]";
@@ -671,7 +671,7 @@ LTCPClientTaskThread *LCPClientTaskPool::newThread()
  *
  * \return 初始化是否成功
  */
-bool LCPClientTaskPool::init()
+bool LTCPClientTaskPool::init()
 {
 	checkconnectThread = new LCheckconnectThread(this); 
 	NEW_CHECK(checkconnectThread);
@@ -696,7 +696,7 @@ bool LCPClientTaskPool::init()
  * \brief 把一个指定任务添加到池中
  * \param task 待添加的任务
  */
-bool LCPClientTaskPool::put(LTCPClientTask *task)
+bool LTCPClientTaskPool::put(LTCPClientTask *task)
 {
 	if (task)
 	{
@@ -713,7 +713,7 @@ bool LCPClientTaskPool::put(LTCPClientTask *task)
  * \brief 定时执行的任务
  * 主要是如果客户端断线尝试重连
  */
-void LCPClientTaskPool::timeAction(const LTime &ct)
+void LTCPClientTaskPool::timeAction(const LTime &ct)
 {
 	mlock.lock();
 	for(LTCPClientTask_IT it = tasks.begin(); it != tasks.end(); ++it)
@@ -747,7 +747,7 @@ void LCPClientTaskPool::timeAction(const LTime &ct)
  * \brief 把任务添加到等待连接认证返回的队列中
  * \param task 待添加的任务
  */
-void LCPClientTaskPool::addCheckwait(LTCPClientTask *task)
+void LTCPClientTaskPool::addCheckwait(LTCPClientTask *task)
 {
 	checkwaitThread->add(task);
 	task->getNextState();
@@ -758,7 +758,7 @@ void LCPClientTaskPool::addCheckwait(LTCPClientTask *task)
  * \param task 待添加的任务
  * \return 添加是否成功
  */
-bool LCPClientTaskPool::addMain(LTCPClientTask *task)
+bool LTCPClientTaskPool::addMain(LTCPClientTask *task)
 {
 	LTCPClientTaskThread *taskThread = NULL;
 	for(unsigned int i = 0; i < taskThreads.size(); i++)

@@ -468,7 +468,7 @@ const char *LSocket::getIPByIfName(const char *ifName)
 {
 	int s;
 	struct ifreq ifr;
-	static char *none_ip = "0.0.0.0";
+	static const char *none_ip = "0.0.0.0";
 
 	if (NULL == ifName)
 		return none_ip;

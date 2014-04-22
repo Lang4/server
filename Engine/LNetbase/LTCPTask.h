@@ -103,7 +103,7 @@ class LTCPTask : public LProcessor, private LCantCopy
 		 */
 		void fillPollFD(struct pollfd &pfd, short events)
 		{
-			mSocket.fillPollFD(pfd, events);
+			//mSocket.fillPollFD(pfd, events);
 		}
 #endif
 

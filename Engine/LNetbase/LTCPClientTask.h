@@ -197,8 +197,8 @@ class LTCPClientTask : public LProcessor, private LCantCopy
 		 */
 		void fillPollFD(struct pollfd &pfd, short events)
 		{
-			if (pSocket)
-				pSocket->fillPollFD(pfd, events);
+			//if (pSocket)
+			//	pSocket->fillPollFD(pfd, events);
 		}
 #endif
 

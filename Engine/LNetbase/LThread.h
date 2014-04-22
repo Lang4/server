@@ -198,7 +198,7 @@ class LThread : private LCantCopy
  * \brief 对线程进行分组管理的类
  *
  */
-class zThreadGroup : private LCantCopy
+class LThreadGroup : private LCantCopy
 {
 
 	public:
@@ -211,8 +211,8 @@ class zThreadGroup : private LCantCopy
 
 		typedef std::vector<LThread *> Container;	/**< 容器类型 */
 
-		zThreadGroup();
-		~zThreadGroup();
+		LThreadGroup();
+		~LThreadGroup();
 		void add(LThread *thread);
 		LThread *getByIndex(const Container::size_type index);
 		LThread *operator[] (const Container::size_type index);
@@ -221,7 +221,7 @@ class zThreadGroup : private LCantCopy
 		
 		const Container::size_type size()
 		{
-			zRWLock_scope_rdlock scope_rdlock(rwlock);
+			LRWLockScopeRdlock scope_rdlock(rwlock);
 			return vts.size();
 		}
 

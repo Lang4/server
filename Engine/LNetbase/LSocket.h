@@ -381,7 +381,7 @@ class LSocket : private LCantCopy
 		inline unsigned int packetSize(const unsigned char *in) const 
 		{ 
 			unsigned int len = *((unsigned int *)in);
-			return PH_LEN + len & PACKET_MASK; 
+			return PH_LEN + (len & PACKET_MASK); 
 		}
 
 		inline int sendRawData(const void *pBuffer, const int nSize);

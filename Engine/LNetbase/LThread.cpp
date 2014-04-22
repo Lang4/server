@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <mysql.h>
+#include <algorithm>
 
 #include "LThread.h"
 
@@ -125,7 +126,7 @@ void LThread::join()
  * \brief 构造函数
  *
  */
-zThreadGroup::zThreadGroup() : vts(), rwlock()
+LThreadGroup::LThreadGroup() : vts(), rwlock()
 {
 }
 
@@ -133,7 +134,7 @@ zThreadGroup::zThreadGroup() : vts(), rwlock()
  * \brief 析构函数
  *
  */
-zThreadGroup::~zThreadGroup()
+LThreadGroup::~LThreadGroup()
 {
 	joinAll();
 }
@@ -142,9 +143,9 @@ zThreadGroup::~zThreadGroup()
  * \brief 添加一个线程到分组中
  * \param thread 待添加的线程
  */
-void zThreadGroup::add(LThread *thread)
+void LThreadGroup::add(LThread *thread)
 {
-	zRWLock_scope_wrlock scope_wrlock(rwlock);
+	LRWLockScopeWrlock scope_wrlock(rwlock);
 	Container::iterator it = std::find(vts.begin(), vts.end(), thread);
 	if (it == vts.end())
 		vts.push_back(thread);
@@ -155,9 +156,9 @@ void zThreadGroup::add(LThread *thread)
  * \param index 下标编号
  * \return 线程
  */
-LThread *zThreadGroup::getByIndex(const Container::size_type index)
+LThread *LThreadGroup::getByIndex(const Container::size_type index)
 {
-	zRWLock_scope_rdlock scope_rdlock(rwlock);
+	LRWLockScopeRdlock scope_rdlock(rwlock);
 	if (index >= vts.size())
 		return NULL;
 	else
@@ -169,9 +170,9 @@ LThread *zThreadGroup::getByIndex(const Container::size_type index)
  * \param index 下标编号
  * \return 线程
  */
-LThread *zThreadGroup::operator[] (const Container::size_type index)
+LThread *LThreadGroup::operator[] (const Container::size_type index)
 {
-	zRWLock_scope_rdlock scope_rdlock(rwlock);
+	LRWLockScopeRdlock scope_rdlock(rwlock);
 	if (index >= vts.size())
 		return NULL;
 	else
@@ -181,9 +182,9 @@ LThread *zThreadGroup::operator[] (const Container::size_type index)
 /**
  * \brief 等待分组中的所有线程结束
  */
-void zThreadGroup::joinAll()
+void LThreadGroup::joinAll()
 {
-	zRWLock_scope_wrlock scope_wrlock(rwlock);
+	LRWLockScopeWrlock scope_wrlock(rwlock);
 	while(!vts.empty())
 	{
 		LThread *pThread = vts.back();
@@ -202,9 +203,9 @@ void zThreadGroup::joinAll()
  * \brief 对容器中的所有元素调用回调函数
  * \param cb 回调函数实例
  */
-void zThreadGroup::execAll(Callback &cb)
+void LThreadGroup::execAll(Callback &cb)
 {
-	zRWLock_scope_rdlock scope_rdlock(rwlock);
+	LRWLockScopeRdlock scope_rdlock(rwlock);
 	for(Container::iterator it = vts.begin(); it != vts.end(); ++it)
 	{
 		cb.exec(*it);

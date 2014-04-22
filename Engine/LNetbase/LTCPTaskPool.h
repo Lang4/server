@@ -111,13 +111,13 @@ class LTCPTaskPool : private LCantCopy
 		const int maxConns;										/**< 线程池并行处理连接的最大数量 */
 
 		static const int maxVerifyThreads = 4;					/**< 最大验证线程数量 */
-		zThreadGroup verifyThreads;								/**< 验证线程，可以有多个 */
+		LThreadGroup verifyThreads;								/**< 验证线程，可以有多个 */
 
 		LSyncThread *syncThread;								/**< 等待同步线程 */
 
 		static const int minThreadCount = 1;					/**< 线程池中同时存在主处理线程的最少个数 */
 		int maxThreadCount;										/**< 线程池中同时存在主处理线程的最大个数 */
-		zThreadGroup okayThreads;								/**< 处理主线程，多个 */
+		LThreadGroup okayThreads;								/**< 处理主线程，多个 */
 
 		zRecycleThread *recycleThread;							/**< 连接回收线程 */
 

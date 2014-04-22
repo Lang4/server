@@ -23,7 +23,7 @@
 class LMutex : private LCantCopy
 {
 
-	friend class HCond;
+	friend class LCond;
 
 	public:
 
