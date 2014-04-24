@@ -1,0 +1,6 @@
+add_subdirectory(zlib)
+add_subdirectory(netbase)
+add_subdirectory(xml)
+add_subdirectory(cjson)
+add_subdirectory(lua)
+add_subdirectory(tolua)

@@ -1,0 +1,19 @@
+服务器使用lua 脚本编写 从lua启动
+
+function Service(resquest [json],response[json])
+{
+	//构建json 返回 字符串
+	response.write(str);
+}
+
+// req(path,args); // 
+
+CmdObject(2) 为Lua脚本调用系列
+
+cplusnet:req("path",json); // 传入字符串
+
+LuaCmdObject(2)
+{
+	std::sting path; // 路径
+	std::sting jsonStr; // json脚本 发送的客户端
+}
