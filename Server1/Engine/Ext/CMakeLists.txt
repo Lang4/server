@@ -1,6 +1,10 @@
 add_subdirectory(zlib)
 add_subdirectory(netbase)
+add_subdirectory(LServer)
 add_subdirectory(xml)
 add_subdirectory(cjson)
 add_subdirectory(lua)
 add_subdirectory(tolua)
+add_subdirectory(zthread)
+add_subdirectory(g3dlite)
+
